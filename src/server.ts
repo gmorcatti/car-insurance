@@ -1,13 +1,18 @@
-import dotenv from 'dotenv';
-dotenv.config();
-
 import express from 'express';
+
+import './config/dotenv';
 import './database';
+
+import { errorHandler } from './middlewares/errorHandler';
+import routes from './routes';
 
 const app = express();
 
-app.get('/', (request, response) => {
-    return response.send('API is Running 2312');
-})
+app.use(express.json());
 
-app.listen(3333, () => console.log('App is running'))
+app.use(routes);
+
+app.use(errorHandler);
+
+const PORT = process.env.PORT || 3333;
+app.listen(PORT, () => console.log(`App is running on port ${PORT}`));
